@@ -14,9 +14,9 @@ buildNumber.properties
 .mvn/timing.properties
 resources/static/
 resources/templates/
-src/test/
 mvnw
 mvnw.cmd
+src/main/resources/application.properties
 
 ### STS ###
 .apt_generated
