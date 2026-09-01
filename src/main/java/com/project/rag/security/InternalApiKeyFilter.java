@@ -27,7 +27,7 @@ public class InternalApiKeyFilter extends OncePerRequestFilter {
 
             if (providedKey == null || !providedKey.equals(internalApiKey)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Unauthorized: Invalid or missing API Key");
+                response.getWriter().write("Unauthorised: Invalid or missing API Key");
                 return;
             }
         }
