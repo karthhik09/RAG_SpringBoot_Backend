@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class DocumentResponse {
 
-    private Integer id;
+    private Long id;
     private String fileName;
     private String status;
     private String uploadedAt;
