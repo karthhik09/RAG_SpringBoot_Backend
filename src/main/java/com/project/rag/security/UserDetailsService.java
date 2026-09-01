@@ -2,11 +2,12 @@ package com.project.rag.security;
 
 import com.project.rag.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,10 +17,10 @@ public class UserDetailsService implements org.springframework.security.core.use
 
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .map(user -> new org.springframework.security.core.userdetails.User
-                        (user.getEmail(), user.getPassword(), Collections.EMPTY_LIST)
+                        (user.getEmail(), user.getPassword(), List.of())
                 )
                 .orElseThrow(() -> new UsernameNotFoundException("user not found" + email));
     }
