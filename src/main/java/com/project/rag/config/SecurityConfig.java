@@ -1,5 +1,6 @@
 package com.project.rag.config;
 
+import com.project.rag.security.InternalApiKeyFilter;
 import com.project.rag.security.JwtAuthFilter;
 import com.project.rag.security.UserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class SecurityConfig {
 
     private final JwtAuthFilter  jwtAuthFilter;
     private final UserDetailsService userDetailsService;
+    private final InternalApiKeyFilter internalApiKeyFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
@@ -38,13 +40,20 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**","/auth/signup").permitAll()
+                        .requestMatchers("/api/internal/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).authenticationProvider(authenticationProvider())
+                    .addFilterBefore(internalApiKeyFilter, UsernamePasswordAuthenticationFilter.class)
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-            return http.build();
+
+                try {
+                    return http.build();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
     }
 
     @Bean
