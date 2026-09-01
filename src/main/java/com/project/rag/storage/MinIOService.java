@@ -1,9 +1,6 @@
 package com.project.rag.storage;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,6 +46,19 @@ public class MinIOService {
             return uniqueFilename;
         } catch (Exception e) {
             throw new RuntimeException("Error occurred while uploading file to MinIO", e);
+        }
+    }
+
+    public void deleteFile(String minIoKey) {
+        try {
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(minIoKey)
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete file from MinIO: " + minIoKey, e);
         }
     }
 }
