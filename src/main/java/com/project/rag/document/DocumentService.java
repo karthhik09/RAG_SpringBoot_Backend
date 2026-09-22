@@ -32,7 +32,7 @@ public class DocumentService {
         String minIoKey = minIOService.uploadFile(file);
 
         Document document = Document.builder()
-                .userId(Math.toIntExact(user.getId()))
+                .userId(user.getId())
                 .fileName(file.getOriginalFilename())
                 .minIoKey(minIoKey)
                 .status(DocumentStatus.PENDING)
