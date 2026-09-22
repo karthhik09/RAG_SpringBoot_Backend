@@ -22,7 +22,7 @@ public class ChatService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        request.setUserId(Integer.toUnsignedLong(user.getId()));
+        request.setUserId(user.getId());
 
         AskResponse fastApiResponse = fastApiClient.askQuestion(request);
 
