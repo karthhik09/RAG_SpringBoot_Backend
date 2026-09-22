@@ -39,7 +39,7 @@ public class MinIOService {
                                 .bucket(bucketName)
                                 .object(uniqueFilename)
                                 .stream(inputStream, file.getSize(), -1)
-                                .contentType(file.getContentType())
+                                .contentType(contentType)
                                 .build()
                 );
             }
