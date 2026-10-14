@@ -1,6 +1,7 @@
 package com.project.rag.exception;
 
 import com.project.rag.client.FastApiClientException;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
