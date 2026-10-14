@@ -28,4 +28,9 @@ public class DocumentController {
         documentService.deleteDocument(id, principal.getName());
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<DocumentResponse> getDocumentStatus(@PathVariable Long id, Principal principal) {
+        return ResponseEntity.ok(documentService.getDocumentStatus(id, principal.getName()));
+    }
 }
