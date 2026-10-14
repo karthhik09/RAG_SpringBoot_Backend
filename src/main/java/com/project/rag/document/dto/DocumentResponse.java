@@ -13,4 +13,5 @@ public class DocumentResponse {
     private String fileName;
     private String status;
     private String uploadedAt;
+    private String errorMessage;
 }
