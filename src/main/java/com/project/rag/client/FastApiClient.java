@@ -3,6 +3,7 @@ package com.project.rag.client;
 import com.project.rag.chat.dto.AskRequest;
 import com.project.rag.chat.dto.AskResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -16,6 +17,7 @@ public class FastApiClient {
         try {
             AskResponse response = fastApiClient.post()
                     .uri("/query")
+                    .contentType(MediaType.APPLICATION_JSON)
                     .body(request)
                     .retrieve()
                     .body(AskResponse.class);
