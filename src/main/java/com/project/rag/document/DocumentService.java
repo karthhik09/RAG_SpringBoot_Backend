@@ -94,4 +94,20 @@ public class DocumentService {
             System.err.println("Failed to notify AI worker of document deletion: " + e.getMessage());
         }
     }
+
+    public DocumentResponse getDocumentStatus(Long documentId, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Document document = documentRepository.findByIdAndUserId(documentId, user.getId())
+                .orElseThrow(() -> new RuntimeException("Document not found or unauthorized"));
+
+        return DocumentResponse.builder()
+                .id(document.getId())
+                .fileName(document.getFileName())
+                .status(document.getStatus().name())
+                .errorMessage(document.getErrorMessage())
+                .uploadedAt(document.getUploadedAt().toString())
+                .build();
+    }
 }
