@@ -2,10 +2,12 @@ package com.project.rag.chat.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class AskResponse {
 
     private String answer;
     private Integer sessionId;
-    // need to implement the citation part later
+    private List<CitationResponse> sources;
 }
