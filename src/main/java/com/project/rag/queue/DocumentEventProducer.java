@@ -16,11 +16,17 @@ public class DocumentEventProducer {
     private static final String QUEUE_NAME = "document_ingestion_queue";
 
     public void publishEvent(DocumentEvent event) {
+        String jsonMessage;
         try {
-            String jsonMessage = objectMapper.writeValueAsString(event);
+            jsonMessage = objectMapper.writeValueAsString(event);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to serialise event to JSON", e);
+        }
+
+        try {
             stringRedisTemplate.opsForList().leftPush(QUEUE_NAME, jsonMessage);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to serialise event for Redis", e);
+            throw new RuntimeException("Failed to push event to Redis Cloud: " + e.getMessage(), e);
         }
     }
 }
