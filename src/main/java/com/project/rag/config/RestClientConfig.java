@@ -1,5 +1,6 @@
 package com.project.rag.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
@@ -10,6 +11,9 @@ import java.net.http.HttpClient;
 @Configuration
 public class RestClientConfig {
 
+    @Value("${app.fastapi.url}")
+    private String fastApiUrl;
+
     @Bean
     public RestClient fastApiRestClient() {
         HttpClient httpClient = HttpClient.newBuilder()
@@ -19,7 +23,7 @@ public class RestClientConfig {
         JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
 
         return RestClient.builder()
-                .baseUrl("http://localhost:8081")
+                .baseUrl(fastApiUrl)
                 .requestFactory(requestFactory)
                 .build();
     }
