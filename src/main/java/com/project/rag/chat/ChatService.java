@@ -1,5 +1,6 @@
 package com.project.rag.chat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.rag.chat.dto.AskRequest;
 import com.project.rag.chat.dto.AskResponse;
 import com.project.rag.client.FastApiClient;
@@ -17,6 +18,8 @@ public class ChatService {
     private final ChatSessionRepository sessionRepository;
     private final ChatMessageRepository messageRepository;
     private final UserRepository userRepository;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public AskResponse askQuestion(String email, AskRequest request) {
         User user = userRepository.findByEmail(email)
@@ -38,10 +41,20 @@ public class ChatService {
             }
         }
 
+        String sourcesJson = null;
+        try {
+            if (fastApiResponse.getSources() != null && !fastApiResponse.getSources().isEmpty()) {
+                sourcesJson = objectMapper.writeValueAsString(fastApiResponse.getSources());
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to serialize sources to JSON: " + e.getMessage());
+        }
+
         ChatMessage message = ChatMessage.builder()
                 .session(session)
                 .userQuery(request.getQuery())
                 .aiResponse(fastApiResponse.getAnswer())
+                .sourcesJson(sourcesJson)
                 .build();
         messageRepository.save(message);
 
