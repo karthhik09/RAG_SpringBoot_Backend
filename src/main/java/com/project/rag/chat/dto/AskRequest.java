@@ -8,4 +8,5 @@ public class AskRequest {
     private String query;
     private Long userId;
     private Integer sessionId;
+    private Long documentId;
 }
