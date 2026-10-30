@@ -28,6 +28,9 @@ public class ChatMessage {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String aiResponse;
 
+    @Column(columnDefinition = "TEXT")
+    private String sourcesJson;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 }
