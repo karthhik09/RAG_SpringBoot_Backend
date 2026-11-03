@@ -10,8 +10,13 @@ import com.project.rag.user.User;
 import com.project.rag.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.io.IOException;
+import java.util.HexFormat;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +33,17 @@ public class DocumentService {
     public DocumentResponse uploadDocument(MultipartFile file, String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        try {
+            byte[] header = file.getInputStream().readNBytes(4);
+            String hex = HexFormat.of().formatHex(header).toUpperCase();
+
+            if (!hex.startsWith("25504446")) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid file format. Only true PDFs are allowed.");
+            }
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to read file contents.");
+        }
 
         String minIoKey = minIOService.uploadFile(file);
 
