@@ -30,4 +30,11 @@ public class FastApiClient {
             throw new FastApiClientException("Failed to communicate with AI worker: " + e.getMessage(), e);
         }
     }
+
+    public void deleteDocumentVectors(Long documentId) {
+        fastApiClient.delete()
+                .uri("/documents/{documentId}", documentId)
+                .retrieve()
+                .toBodilessEntity();
+    }
 }
